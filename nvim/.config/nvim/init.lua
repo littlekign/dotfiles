@@ -25,6 +25,8 @@ vim.opt.foldenable = true
 vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 vim.opt.foldtext = "v:lua.vim.treesitter.foldtext()"
 
+vim.opt.winborder = "single"
+
 require("config.lazy")
 
 -- Colors
@@ -58,6 +60,11 @@ vim.keymap.set("n", "<leader>tt", ':lua require("neotest").run.run()<CR>')
 vim.keymap.set("n", "<leader>tr", ':lua require("neotest").summary.toggle()<CR>')
 
 -- Telescope
+require("telescope").setup({
+	defaults = {
+		borderchars = { "─", "│", "─", "│", "┌", "┐", "┘", "└" },
+	},
+})
 local builtin = require("telescope.builtin")
 local function find_by_ext(glob)
 	return function()
@@ -72,11 +79,6 @@ vim.keymap.set("n", "<leader>ft", builtin.live_grep, { desc = "Telescope live gr
 vim.keymap.set("n", "<leader>fb", builtin.buffers, { desc = "Telescope buffers" })
 vim.keymap.set("n", "<leader>fh", builtin.help_tags, { desc = "Telescope help tags" })
 vim.keymap.set("n", "<leader>fs", builtin.lsp_document_symbols, { desc = "Telescope help tags" })
-
-require("telescope").setup({
-	defaults = {},
-	extensions = {},
-})
 
 vim.api.nvim_create_autocmd("User", {
 	pattern = "TelescopePreviewerLoaded",

@@ -41,6 +41,7 @@ alias diff="git diff"
 alias va=". .venv/bin/activate"
 alias da="deactivate"
 alias ...="cd ../.."
+alias tmain="tmux new-session -A -s main"
 
 # SSH STRING
 export PATH="$HOME/.local/bin:$PATH"
