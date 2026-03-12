@@ -2,4 +2,4 @@
 
 install:
 	brew install stow
-	stow zsh nvim git tmux --target=/Users/doug
+	stow zsh nvim git tmux gh ghostty --target=/Users/doug

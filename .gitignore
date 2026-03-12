@@ -1,5 +1,9 @@
 *.cache
-.config/tmux/plugins/
-.config/iterm2/
-lazy-lock.json
+.DS_Store
 .config/gh/
+.config/iterm2/
+.config/tmux/plugins/
+lazy-lock.json
+
+# Candid-specific config (lives in ~/ outside dotfiles)
+.candid-zshrc
