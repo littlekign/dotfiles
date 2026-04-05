@@ -1,2 +1,3 @@
-theme = catppuccin-mocha.conf
+theme = "Monokai Pro"
 font-family = "JetBrainsMono Nerd Font Mono"
+desktop-notifications = true

@@ -25,6 +25,9 @@ return {
 	-- Auto-import support (keymaps in config/keymaps.lua)
 	"stevanmilic/nvim-lspimport",
 
+	-- LSP progress indicator
+	{ "j-hui/fidget.nvim", event = "LspAttach", opts = {} },
+
 	-- Main LSP configuration
 	{
 		"neovim/nvim-lspconfig",
@@ -32,7 +35,6 @@ return {
 			{ "mason-org/mason.nvim", opts = {} },
 			{ "mason-org/mason-lspconfig.nvim", opts = {} },
 			"WhoIsSethDaniel/mason-tool-installer.nvim",
-			{ "j-hui/fidget.nvim", opts = {} },
 			"saghen/blink.cmp",
 		},
 		config = function()

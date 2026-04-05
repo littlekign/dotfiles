@@ -12,51 +12,38 @@ return {
 		opts = {},
 	},
 
-	-- Treesitter - better syntax highlighting and code navigation
+	-- Treesitter - syntax parsing and highlighting
 	{
 		"nvim-treesitter/nvim-treesitter",
-		branch = "master", -- Pin to master branch for stable API
+		branch = "main",
 		build = ":TSUpdate",
-		lazy = false, -- Treesitter should not be lazy-loaded
-		dependencies = {
-			"nvim-treesitter/nvim-treesitter-textobjects",
-		},
+		lazy = false,
 		config = function()
-			require("nvim-treesitter.configs").setup({
-				ensure_installed = {
-					"c",
-					"go",
-					"lua",
-					"python",
-					"query",
-					"ruby",
-					"vim",
-					"vimdoc",
-				},
-				highlight = { enable = true },
-				textobjects = {
-					move = {
-						enable = true,
-						goto_next_start = {
-							["]m"] = "@function.outer",
-							["]]"] = "@class.outer",
-						},
-						goto_next_end = {
-							["]M"] = "@function.outer",
-							["]["] = "@class.outer",
-						},
-						goto_previous_start = {
-							["[m"] = "@function.outer",
-							["[["] = "@class.outer",
-						},
-						goto_previous_end = {
-							["[M"] = "@function.outer",
-							["[]"] = "@class.outer",
-						},
-					},
-				},
+			require("nvim-treesitter").setup()
+			require("nvim-treesitter").install({
+				"c",
+				"go",
+				"lua",
+				"python",
+				"query",
+				"ruby",
+				"vim",
+				"vimdoc",
 			})
 		end,
+	},
+
+	-- Treesitter text objects - navigate by function/class
+	{
+		"nvim-treesitter/nvim-treesitter-textobjects",
+		branch = "main",
+		dependencies = { "nvim-treesitter/nvim-treesitter" },
+		config = function()
+			require("nvim-treesitter-textobjects").setup({
+				move = { set_jumps = true },
+			})
+		end,
+		-- Keymaps in config/keymaps.lua
 	},
 
 	-- Format on save

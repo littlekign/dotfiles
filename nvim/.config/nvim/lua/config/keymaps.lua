@@ -11,6 +11,8 @@
 -- Clear search highlighting
 vim.keymap.set("n", "<esc>", "<cmd>nohlsearch<CR>")
 vim.keymap.set("n", "<leader>h", ":noh<CR>")
+vim.keymap.set("n", "j", "gj")
+vim.keymap.set("n", "k", "gk")
 
 -- Edit/source config files
 vim.keymap.set("n", "<leader>ev", ":tabe ~/.config/nvim/init.lua<CR>", { desc = "Edit init.lua" })
@@ -73,12 +75,45 @@ vim.keymap.set("n", "[Q", ":cfirst<CR>", { desc = "First quickfix" })
 vim.keymap.set("n", "]Q", ":clast<CR>", { desc = "Last quickfix" })
 vim.keymap.set("n", "<leader>qo", ":copen<CR>", { desc = "Open quickfix" })
 vim.keymap.set("n", "<leader>qc", ":cclose<CR>", { desc = "Close quickfix" })
+vim.keymap.set("n", "<leader>qp", ":cexpr system('pbpaste')<CR>:copen<CR>", { desc = "Paste into quickfix" })
 
 -- ============================================================================
 -- FILE EXPLORER (Oil.nvim)
 -- ============================================================================
 
 vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
+
+-- ============================================================================
+-- TREESITTER TEXT OBJECTS (Navigate by function/class)
+-- ============================================================================
+
+local ts_move_ok, ts_move = pcall(require, "nvim-treesitter-textobjects.move")
+if ts_move_ok then
+	vim.keymap.set({ "n", "x", "o" }, "]m", function()
+		ts_move.goto_next_start("@function.outer", "textobjects")
+	end, { desc = "Next function start" })
+	vim.keymap.set({ "n", "x", "o" }, "]M", function()
+		ts_move.goto_next_end("@function.outer", "textobjects")
+	end, { desc = "Next function end" })
+	vim.keymap.set({ "n", "x", "o" }, "]]", function()
+		ts_move.goto_next_start("@class.outer", "textobjects")
+	end, { desc = "Next class start" })
+	vim.keymap.set({ "n", "x", "o" }, "][", function()
+		ts_move.goto_next_end("@class.outer", "textobjects")
+	end, { desc = "Next class end" })
+	vim.keymap.set({ "n", "x", "o" }, "[m", function()
+		ts_move.goto_previous_start("@function.outer", "textobjects")
+	end, { desc = "Previous function start" })
+	vim.keymap.set({ "n", "x", "o" }, "[M", function()
+		ts_move.goto_previous_end("@function.outer", "textobjects")
+	end, { desc = "Previous function end" })
+	vim.keymap.set({ "n", "x", "o" }, "[[", function()
+		ts_move.goto_previous_start("@class.outer", "textobjects")
+	end, { desc = "Previous class start" })
+	vim.keymap.set({ "n", "x", "o" }, "[]", function()
+		ts_move.goto_previous_end("@class.outer", "textobjects")
+	end, { desc = "Previous class end" })
+end
 
 -- ============================================================================
 -- TELESCOPE (Fuzzy Finder)
@@ -88,6 +123,9 @@ local telescope_ok, builtin = pcall(require, "telescope.builtin")
 if telescope_ok then
 	-- File finding
 	vim.keymap.set("n", "<leader>ff", builtin.find_files, { desc = "Find files" })
+	vim.keymap.set("n", "<leader>f.", function()
+		builtin.find_files({ hidden = true })
+	end, { desc = "Find hidden files" })
 	vim.keymap.set("n", "<leader>fo", builtin.oldfiles, { desc = "Recent files" })
 	vim.keymap.set("n", "<leader><leader>", builtin.resume, { desc = "Resume last picker" })
 
@@ -179,8 +217,10 @@ vim.keymap.set("n", "<leader>xq", "<cmd>Trouble qflist toggle<cr>", { desc = "Qu
 -- GIT
 -- ============================================================================
 
-vim.keymap.set("n", "<leader>gd", "<cmd>DiffviewOpen<cr>", { desc = "Git diff" })
+vim.keymap.set("n", "<leader>gd", "<cmd>DiffviewOpen main<cr>", { desc = "Git diff" })
 vim.keymap.set("n", "<leader>gh", "<cmd>DiffviewFileHistory %<cr>", { desc = "File history" })
+vim.keymap.set("n", "<leader>gb", "<cmd>Git blame<cr>", { desc = "Git blame" })
+vim.keymap.set("n", "<leader>go", "<cmd>GBrowse<cr>", { desc = "Git open" })
 
 -- ============================================================================
 -- TESTING (Neotest)
@@ -199,12 +239,12 @@ vim.keymap.set("n", "<leader>tr", function()
 end, { desc = "Toggle test summary" })
 
 -- ============================================================================
--- NOTES (Markdown & Neorg)
+-- NOTES (Obsidian)
 -- ============================================================================
 
--- Markdown preview toggle
-vim.keymap.set("n", "<leader>m", ":RenderMarkdown buf_toggle<CR>", { desc = "Toggle markdown rendering" })
-
--- Neorg
-vim.keymap.set("n", "<leader>n", ":Neorg workspace notes<CR>", { desc = "Neorg notes" })
-vim.keymap.set("n", "<leader>j", ":Neorg journal<CR>", { desc = "Neorg journal" })
+vim.keymap.set("n", "<leader>oi", "<cmd>edit ~/notes/index.md<cr>", { desc = "Open notes index" })
+vim.keymap.set("n", "<leader>oo", "<cmd>ObsidianQuickSwitch<cr>", { desc = "Obsidian quick switcher" })
+vim.keymap.set("n", "<leader>on", "<cmd>ObsidianNew<cr>", { desc = "New note" })
+vim.keymap.set("n", "<leader>os", "<cmd>ObsidianSearch<cr>", { desc = "Search notes" })
+vim.keymap.set("n", "<leader>ot", "<cmd>ObsidianToday<cr>", { desc = "Today's daily note" })
+vim.keymap.set("n", "<leader>ob", "<cmd>ObsidianBacklinks<cr>", { desc = "Show backlinks" })

@@ -1,39 +1,37 @@
 -- Note Taking
--- Purpose: Markdown rendering and note organization
+-- Purpose: Obsidian vault integration
 -- Plugins:
---   - nvim-neorg/neorg - Structured note taking
---   - MeanderingProgrammer/render-markdown.nvim - Markdown preview
+--   - epwalsh/obsidian.nvim - Obsidian vault integration
 
 return {
 	{
-		"MeanderingProgrammer/render-markdown.nvim",
-		dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-tree/nvim-web-devicons" },
-		opts = {},
-		-- Keymaps in config/keymaps.lua
-	},
-	{
-		"nvim-neorg/neorg",
-		lazy = false,
+		"epwalsh/obsidian.nvim",
 		version = "*",
-		dependencies = { "nvim-neorg/tree-sitter-norg" },
-		config = function()
-			require("neorg").setup({
-				load = {
-					["core.defaults"] = {},
-					["core.concealer"] = {},
-					["core.dirman"] = {
-						config = {
-							workspaces = {
-								notes = "~/notes",
-							},
-							default_workspace = "notes",
-						},
-					},
-				},
+		dependencies = { "nvim-lua/plenary.nvim" },
+		event = {
+			"BufReadPre " .. vim.fn.expand("~") .. "/notes/**.md",
+			"BufNewFile " .. vim.fn.expand("~") .. "/notes/**.md",
+		},
+		cmd = { "ObsidianQuickSwitch", "ObsidianNew", "ObsidianSearch", "ObsidianToday", "ObsidianBacklinks" },
+		init = function()
+			vim.api.nvim_create_autocmd("FileType", {
+				pattern = "markdown",
+				callback = function()
+					vim.opt_local.conceallevel = 2
+				end,
 			})
-			vim.wo.foldlevel = 99
-			vim.wo.conceallevel = 2
-			-- Keymaps in config/keymaps.lua
 		end,
+		opts = {
+			workspaces = {
+				{ name = "notes", path = "~/notes" },
+			},
+			note_id_func = function(title)
+				return title
+			end,
+			follow_url_func = function(url)
+				vim.fn.jobstart({ "open", url })
+			end,
+		},
+		-- Keymaps in config/keymaps.lua
 	},
 }

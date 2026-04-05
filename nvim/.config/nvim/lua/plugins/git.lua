@@ -10,6 +10,10 @@ return {
 		name = "vim-fugitive",
 	},
 	{
+		"tpope/vim-rhubarb",
+		name = "vim-rhubarb",
+	},
+	{
 		"sindrets/diffview.nvim",
 		dependencies = "nvim-lua/plenary.nvim",
 		-- Keymaps in config/keymaps.lua
