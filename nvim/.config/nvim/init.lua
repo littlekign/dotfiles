@@ -26,3 +26,8 @@ require("config.keymaps")
 require("config.autocmds")
 
 vim.cmd.colorscheme("monokai-pro")
+
+-- Diff: no full-line background, just gutter signs + inline text highlights
+vim.api.nvim_set_hl(0, "DiffAdd", { bg = "none" })
+vim.api.nvim_set_hl(0, "DiffDelete", { bg = "none" })
+vim.api.nvim_set_hl(0, "DiffChange", { bg = "none" })

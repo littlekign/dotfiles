@@ -25,6 +25,9 @@ return {
 			workspaces = {
 				{ name = "notes", path = "~/notes" },
 			},
+			daily_notes = {
+				folder = "daily",
+			},
 			note_id_func = function(title)
 				return title
 			end,

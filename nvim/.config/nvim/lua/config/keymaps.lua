@@ -221,6 +221,19 @@ vim.keymap.set("n", "<leader>gd", "<cmd>DiffviewOpen main<cr>", { desc = "Git di
 vim.keymap.set("n", "<leader>gh", "<cmd>DiffviewFileHistory %<cr>", { desc = "File history" })
 vim.keymap.set("n", "<leader>gb", "<cmd>Git blame<cr>", { desc = "Git blame" })
 vim.keymap.set("n", "<leader>go", "<cmd>GBrowse<cr>", { desc = "Git open" })
+vim.keymap.set("v", "<leader>go", ":'<,'>GBrowse<cr>", { desc = "Git open (selected lines)" })
+vim.keymap.set("n", "<leader>gi", function()
+	require("config.github").open_prs()
+end, { desc = "PRs (current repo)" })
+vim.keymap.set("n", "<leader>gg", function()
+	require("config.github").org_prs()
+end, { desc = "PRs ($GH_ORG)" })
+vim.keymap.set("n", "<leader>ll", function()
+	require("config.linear").browse_projects()
+end, { desc = "Linear project issues" })
+vim.keymap.set("n", "<leader>lc", function()
+	require("config.linear").create_issue()
+end, { desc = "Create Linear issue ($LINEAR_DEFAULT_TEAM)" })
 
 -- ============================================================================
 -- TESTING (Neotest)
@@ -248,3 +261,18 @@ vim.keymap.set("n", "<leader>on", "<cmd>ObsidianNew<cr>", { desc = "New note" })
 vim.keymap.set("n", "<leader>os", "<cmd>ObsidianSearch<cr>", { desc = "Search notes" })
 vim.keymap.set("n", "<leader>ot", "<cmd>ObsidianToday<cr>", { desc = "Today's daily note" })
 vim.keymap.set("n", "<leader>ob", "<cmd>ObsidianBacklinks<cr>", { desc = "Show backlinks" })
+vim.keymap.set("n", "<leader>od", "<cmd>ObsidianDailies<cr>", { desc = "Show Dailies" })
+
+local function open_most_recent(dir)
+	return function()
+		local files = vim.fn.glob(vim.fn.expand("~/notes/" .. dir .. "/*.md"), false, true)
+		if #files == 0 then
+			vim.notify("No " .. dir .. " notes found", vim.log.levels.WARN)
+			return
+		end
+		table.sort(files)
+		vim.cmd("edit " .. vim.fn.fnameescape(files[#files]))
+	end
+end
+vim.keymap.set("n", "<leader>ow", open_most_recent("weekly"), { desc = "Most recent weekly note" })
+vim.keymap.set("n", "<leader>om", open_most_recent("monthly"), { desc = "Most recent monthly note" })

@@ -15,7 +15,7 @@ SAVEHIST=1000
 # ============================================================================
 
 setopt autocd extendedglob nomatch
-zstyle :compinstall filename '/Users/doug/.zshrc'
+zstyle :compinstall filename "$HOME/.zshrc"
 
 # Enable completion
 autoload -Uz compinit
@@ -141,4 +141,3 @@ if [[ -n "$TMUX" ]]; then
   precmd() { }
   preexec() { }
 fi
-
